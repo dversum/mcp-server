@@ -67,4 +67,119 @@ export function registerStorageTools(
       };
     }
   );
+
+  server.tool(
+    "update_folder",
+    "Update a folder's name or color.",
+    {
+      id: z.string().describe("The folder UUID"),
+      name: z.string().optional().describe("Folder name"),
+      color: z.string().optional().describe("Folder color"),
+    },
+    async ({ id, ...fields }) => {
+      const data = await client.put(`/storage/folders/${id}`, fields);
+      return {
+        content: [{ type: "text", text: JSON.stringify(data, null, 2) }],
+      };
+    }
+  );
+
+  server.tool(
+    "delete_folder",
+    "Delete a folder and all its contents.",
+    {
+      id: z.string().describe("The folder UUID"),
+    },
+    async ({ id }) => {
+      await client.delete(`/storage/folders/${id}`);
+      return {
+        content: [{ type: "text", text: `Folder ${id} deleted successfully.` }],
+      };
+    }
+  );
+
+  server.tool(
+    "get_file",
+    "Get details about a specific file.",
+    {
+      id: z.string().describe("The file UUID"),
+    },
+    async ({ id }) => {
+      const data = await client.get(`/storage/files/${id}`);
+      return {
+        content: [{ type: "text", text: JSON.stringify(data, null, 2) }],
+      };
+    }
+  );
+
+  server.tool(
+    "delete_file",
+    "Delete a file from storage.",
+    {
+      id: z.string().describe("The file UUID"),
+    },
+    async ({ id }) => {
+      await client.delete(`/storage/files/${id}`);
+      return {
+        content: [{ type: "text", text: `File ${id} deleted successfully.` }],
+      };
+    }
+  );
+
+  server.tool(
+    "get_file_download_url",
+    "Get a presigned download URL for a file.",
+    {
+      id: z.string().describe("The file UUID"),
+    },
+    async ({ id }) => {
+      const data = await client.get(`/storage/files/${id}/download`);
+      return {
+        content: [{ type: "text", text: JSON.stringify(data, null, 2) }],
+      };
+    }
+  );
+
+  server.tool(
+    "create_share_link",
+    "Create a share link for a file (WeTransfer-style).",
+    {
+      file_id: z.string().describe("The file UUID to share"),
+      password: z.string().optional().describe("Optional password protection"),
+      max_downloads: z.number().optional().describe("Maximum number of downloads"),
+      expires_in_days: z.number().optional().describe("Expiry in days"),
+    },
+    async (input) => {
+      const data = await client.post("/storage/shares", input);
+      return {
+        content: [{ type: "text", text: JSON.stringify(data, null, 2) }],
+      };
+    }
+  );
+
+  server.tool(
+    "list_share_links",
+    "List all active share links.",
+    {},
+    async () => {
+      const data = await client.get("/storage/shares");
+      return {
+        content: [{ type: "text", text: JSON.stringify(data, null, 2) }],
+      };
+    }
+  );
+
+  server.tool(
+    "revoke_share_link",
+    "Revoke/delete a share link.",
+    {
+      share_id: z.string().describe("The share link UUID"),
+    },
+    async ({ share_id }) => {
+      await client.delete(`/storage/shares/${share_id}`);
+      return {
+        content: [{ type: "text", text: `Share link revoked.` }],
+      };
+    }
+  );
 }

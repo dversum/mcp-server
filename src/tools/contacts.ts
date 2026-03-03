@@ -57,4 +57,39 @@ export function registerContactTools(
       };
     }
   );
+
+  server.tool(
+    "update_contact",
+    "Update an existing contact's details.",
+    {
+      id: z.string().describe("The contact UUID"),
+      first_name: z.string().optional().describe("First name"),
+      last_name: z.string().optional().describe("Last name"),
+      email: z.string().optional().describe("Email address"),
+      phone: z.string().optional().describe("Phone number"),
+      position: z.string().optional().describe("Job title/position"),
+      client_id: z.string().optional().describe("Associated client UUID"),
+      notes: z.string().optional().describe("Notes"),
+    },
+    async ({ id, ...fields }) => {
+      const data = await client.put(`/contacts/${id}`, fields);
+      return {
+        content: [{ type: "text", text: JSON.stringify(data, null, 2) }],
+      };
+    }
+  );
+
+  server.tool(
+    "delete_contact",
+    "Delete a contact. This cannot be undone.",
+    {
+      id: z.string().describe("The contact UUID"),
+    },
+    async ({ id }) => {
+      await client.delete(`/contacts/${id}`);
+      return {
+        content: [{ type: "text", text: `Contact ${id} deleted successfully.` }],
+      };
+    }
+  );
 }

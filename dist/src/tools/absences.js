@@ -40,5 +40,26 @@ export function registerAbsenceTools(server, client) {
             content: [{ type: "text", text: JSON.stringify(data, null, 2) }],
         };
     });
+    server.tool("update_absence", "Update an existing absence entry.", {
+        id: z.string().describe("The absence UUID"),
+        type: z.enum(["vacation", "sick", "absence", "homeoffice", "business_trip"]).optional().describe("Absence type"),
+        start_date: z.string().optional().describe("Start date (YYYY-MM-DD)"),
+        end_date: z.string().optional().describe("End date (YYYY-MM-DD)"),
+        note: z.string().optional().describe("Note"),
+        half_day: z.boolean().optional().describe("Half-day absence"),
+    }, async ({ id, ...fields }) => {
+        const data = await client.put(`/absences/${id}`, fields);
+        return {
+            content: [{ type: "text", text: JSON.stringify(data, null, 2) }],
+        };
+    });
+    server.tool("delete_absence", "Delete an absence entry.", {
+        id: z.string().describe("The absence UUID"),
+    }, async ({ id }) => {
+        await client.delete(`/absences/${id}`);
+        return {
+            content: [{ type: "text", text: `Absence ${id} deleted successfully.` }],
+        };
+    });
 }
 //# sourceMappingURL=absences.js.map

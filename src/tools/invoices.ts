@@ -131,4 +131,133 @@ export function registerInvoiceTools(
       };
     }
   );
+
+  server.tool(
+    "update_invoice",
+    "Update an existing invoice (only drafts can be edited).",
+    {
+      id: z.string().describe("The invoice UUID"),
+      invoice_date: z.string().optional().describe("Invoice date (YYYY-MM-DD)"),
+      due_date: z.string().optional().describe("Due date (YYYY-MM-DD)"),
+      notes: z.string().optional().describe("Notes on the invoice"),
+    },
+    async ({ id, ...fields }) => {
+      const data = await client.put(`/invoices/${id}`, fields);
+      return {
+        content: [{ type: "text", text: JSON.stringify(data, null, 2) }],
+      };
+    }
+  );
+
+  server.tool(
+    "delete_invoice",
+    "Delete a draft invoice. This cannot be undone.",
+    {
+      id: z.string().describe("The invoice UUID"),
+    },
+    async ({ id }) => {
+      await client.delete(`/invoices/${id}`);
+      return {
+        content: [{ type: "text", text: `Invoice ${id} deleted successfully.` }],
+      };
+    }
+  );
+
+  server.tool(
+    "add_invoice_line_item",
+    "Add a line item to an invoice.",
+    {
+      invoice_id: z.string().describe("The invoice UUID"),
+      description: z.string().describe("Line item description"),
+      quantity: z.number().describe("Quantity"),
+      unit_price: z.number().describe("Unit price in cents"),
+      tax_rate: z.number().optional().describe("Tax rate percentage (e.g. 19)"),
+    },
+    async ({ invoice_id, ...item }) => {
+      const data = await client.post(`/invoices/${invoice_id}/line-items`, item);
+      return {
+        content: [{ type: "text", text: JSON.stringify(data, null, 2) }],
+      };
+    }
+  );
+
+  server.tool(
+    "update_invoice_line_item",
+    "Update a line item on an invoice.",
+    {
+      invoice_id: z.string().describe("The invoice UUID"),
+      item_id: z.string().describe("The line item UUID"),
+      description: z.string().optional().describe("Description"),
+      quantity: z.number().optional().describe("Quantity"),
+      unit_price: z.number().optional().describe("Unit price in cents"),
+      tax_rate: z.number().optional().describe("Tax rate percentage"),
+    },
+    async ({ invoice_id, item_id, ...fields }) => {
+      const data = await client.put(`/invoices/${invoice_id}/line-items/${item_id}`, fields);
+      return {
+        content: [{ type: "text", text: JSON.stringify(data, null, 2) }],
+      };
+    }
+  );
+
+  server.tool(
+    "delete_invoice_line_item",
+    "Delete a line item from an invoice.",
+    {
+      invoice_id: z.string().describe("The invoice UUID"),
+      item_id: z.string().describe("The line item UUID"),
+    },
+    async ({ invoice_id, item_id }) => {
+      await client.delete(`/invoices/${invoice_id}/line-items/${item_id}`);
+      return {
+        content: [{ type: "text", text: `Line item deleted.` }],
+      };
+    }
+  );
+
+  server.tool(
+    "record_payment",
+    "Record a payment on an invoice.",
+    {
+      invoice_id: z.string().describe("The invoice UUID"),
+      amount: z.number().describe("Payment amount in cents"),
+      paid_at: z.string().optional().describe("Payment date (YYYY-MM-DD, default today)"),
+      method: z.string().optional().describe("Payment method (e.g. bank_transfer, paypal)"),
+      note: z.string().optional().describe("Payment note"),
+    },
+    async ({ invoice_id, ...payment }) => {
+      const data = await client.post(`/invoices/${invoice_id}/payments`, payment);
+      return {
+        content: [{ type: "text", text: JSON.stringify(data, null, 2) }],
+      };
+    }
+  );
+
+  server.tool(
+    "create_credit_note",
+    "Create a credit note (Gutschrift) for an invoice.",
+    {
+      invoice_id: z.string().describe("The original invoice UUID"),
+    },
+    async ({ invoice_id }) => {
+      const data = await client.post(`/invoices/${invoice_id}/credit-note`);
+      return {
+        content: [{ type: "text", text: JSON.stringify(data, null, 2) }],
+      };
+    }
+  );
+
+  server.tool(
+    "create_cancellation",
+    "Create a cancellation invoice (Stornorechnung) for an invoice.",
+    {
+      invoice_id: z.string().describe("The original invoice UUID"),
+    },
+    async ({ invoice_id }) => {
+      const data = await client.post(`/invoices/${invoice_id}/cancellation`);
+      return {
+        content: [{ type: "text", text: JSON.stringify(data, null, 2) }],
+      };
+    }
+  );
 }

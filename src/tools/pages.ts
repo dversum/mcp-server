@@ -69,4 +69,47 @@ export function registerPageTools(
       };
     }
   );
+
+  server.tool(
+    "get_page_tree",
+    "Get the full page tree hierarchy.",
+    {},
+    async () => {
+      const data = await client.get("/pages/tree");
+      return {
+        content: [{ type: "text", text: JSON.stringify(data, null, 2) }],
+      };
+    }
+  );
+
+  server.tool(
+    "update_page",
+    "Update a page's metadata (title, icon, parent).",
+    {
+      id: z.string().describe("The page UUID"),
+      title: z.string().optional().describe("Page title"),
+      icon: z.string().optional().describe("Page icon (emoji)"),
+      parent_id: z.string().optional().describe("Parent page UUID"),
+    },
+    async ({ id, ...fields }) => {
+      const data = await client.put(`/pages/${id}`, fields);
+      return {
+        content: [{ type: "text", text: JSON.stringify(data, null, 2) }],
+      };
+    }
+  );
+
+  server.tool(
+    "delete_page",
+    "Delete a page and all its children. This cannot be undone.",
+    {
+      id: z.string().describe("The page UUID"),
+    },
+    async ({ id }) => {
+      await client.delete(`/pages/${id}`);
+      return {
+        content: [{ type: "text", text: `Page ${id} deleted successfully.` }],
+      };
+    }
+  );
 }

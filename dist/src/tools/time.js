@@ -77,5 +77,27 @@ export function registerTimeTools(server, client) {
             content: [{ type: "text", text: JSON.stringify(data, null, 2) }],
         };
     });
+    server.tool("update_time_entry", "Update an existing time entry.", {
+        id: z.string().describe("The time entry UUID"),
+        description: z.string().optional().describe("What was worked on"),
+        start_time: z.string().optional().describe("Start time (ISO 8601)"),
+        end_time: z.string().optional().describe("End time (ISO 8601)"),
+        billable: z.boolean().optional().describe("Whether billable"),
+        project_id: z.string().optional().describe("Project UUID"),
+        task_id: z.string().optional().describe("Task UUID"),
+    }, async ({ id, ...fields }) => {
+        const data = await client.put(`/time-entries/${id}`, fields);
+        return {
+            content: [{ type: "text", text: JSON.stringify(data, null, 2) }],
+        };
+    });
+    server.tool("delete_time_entry", "Delete a time entry. This cannot be undone.", {
+        id: z.string().describe("The time entry UUID"),
+    }, async ({ id }) => {
+        await client.delete(`/time-entries/${id}`);
+        return {
+            content: [{ type: "text", text: `Time entry ${id} deleted successfully.` }],
+        };
+    });
 }
 //# sourceMappingURL=time.js.map

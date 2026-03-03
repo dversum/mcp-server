@@ -1,1 +1,1 @@
-{"version":3,"file":"time.d.ts","sourceRoot":"","sources":["../../../src/tools/time.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,SAAS,EAAE,MAAM,yCAAyC,CAAC;AAEpE,OAAO,EAAE,aAAa,EAAE,MAAM,cAAc,CAAC;AAE7C,wBAAgB,iBAAiB,CAC/B,MAAM,EAAE,SAAS,EACjB,MAAM,EAAE,aAAa,QA0GtB"}
+{"version":3,"file":"time.d.ts","sourceRoot":"","sources":["../../../src/tools/time.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,SAAS,EAAE,MAAM,yCAAyC,CAAC;AAEpE,OAAO,EAAE,aAAa,EAAE,MAAM,cAAc,CAAC;AAE7C,wBAAgB,iBAAiB,CAC/B,MAAM,EAAE,SAAS,EACjB,MAAM,EAAE,aAAa,QA4ItB"}

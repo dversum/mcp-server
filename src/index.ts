@@ -20,6 +20,11 @@ import { registerPageTools } from "./tools/pages.js";
 import { registerStorageTools } from "./tools/storage.js";
 import { registerNotificationTools } from "./tools/notifications.js";
 import { registerOrganizationTools } from "./tools/organization.js";
+import { registerReminderTools } from "./tools/reminders.js";
+import { registerRecurringInvoiceTools } from "./tools/recurring-invoices.js";
+import { registerTagTools } from "./tools/tags.js";
+import { registerAreaTools } from "./tools/areas.js";
+import { registerWhiteboardTools } from "./tools/whiteboards.js";
 
 function registerAllTools(server: McpServer, apiClient: DversumClient): void {
   registerClientTools(server, apiClient);
@@ -36,6 +41,11 @@ function registerAllTools(server: McpServer, apiClient: DversumClient): void {
   registerStorageTools(server, apiClient);
   registerNotificationTools(server, apiClient);
   registerOrganizationTools(server, apiClient);
+  registerReminderTools(server, apiClient);
+  registerRecurringInvoiceTools(server, apiClient);
+  registerTagTools(server, apiClient);
+  registerAreaTools(server, apiClient);
+  registerWhiteboardTools(server, apiClient);
 }
 
 export function createServer(): { server: McpServer; fallbackToken: string } {

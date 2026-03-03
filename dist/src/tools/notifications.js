@@ -20,5 +20,19 @@ export function registerNotificationTools(server, client) {
             content: [{ type: "text", text: JSON.stringify(data, null, 2) }],
         };
     });
+    server.tool("mark_notification_read", "Mark a notification as read.", {
+        id: z.string().describe("The notification UUID"),
+    }, async ({ id }) => {
+        const data = await client.put(`/notifications/${id}/read`);
+        return {
+            content: [{ type: "text", text: JSON.stringify(data, null, 2) }],
+        };
+    });
+    server.tool("mark_all_notifications_read", "Mark all notifications as read.", {}, async () => {
+        const data = await client.put("/notifications/read-all");
+        return {
+            content: [{ type: "text", text: JSON.stringify(data, null, 2) }],
+        };
+    });
 }
 //# sourceMappingURL=notifications.js.map

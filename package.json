@@ -1,6 +1,6 @@
 {
   "name": "@dversum/mcp-server",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Official MCP server for the dVersum business management platform",
   "type": "module",
   "main": "dist/src/index.js",
