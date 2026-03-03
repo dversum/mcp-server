@@ -211,19 +211,12 @@ Once the Docker container is running, point Claude Desktop to the remote endpoin
 | `get_organization` | Get organization details |
 | `list_members` | List team members |
 
-## Getting Your API Token
-
-1. Log in to your dVersum workspace
-2. Go to **Settings > API Tokens**
-3. Create a new token with a descriptive name (e.g. "Claude Desktop")
-4. Copy the token and use it as `DVERSUM_API_TOKEN`
-
 ## Development
 
 ```bash
 # Clone the repo
-git clone https://github.com/dversum/mcp-server.git
-cd mcp-server
+git clone https://github.com/dversum/dversum.git
+cd dversum/mcp-server
 
 # Install dependencies
 npm install

@@ -1,0 +1,36 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.dversum/mcp-server",
+  "description": "Manage clients, projects, tasks, invoices, time tracking & calendar in dVersum.",
+  "repository": {
+    "url": "https://github.com/dversum/mcp-server",
+    "source": "github"
+  },
+  "version": "1.0.0",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@dversum/mcp-server",
+      "version": "1.0.0",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "description": "Base URL of your dVersum API (e.g. https://api.dversum.com/api/v1)",
+          "isRequired": true,
+          "format": "string",
+          "isSecret": false,
+          "name": "DVERSUM_API_URL"
+        },
+        {
+          "description": "Your dVersum JWT authentication token (get it from Settings > API Tokens)",
+          "isRequired": true,
+          "format": "string",
+          "isSecret": true,
+          "name": "DVERSUM_API_TOKEN"
+        }
+      ]
+    }
+  ]
+}
