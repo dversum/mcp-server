@@ -1,0 +1,10 @@
+services:
+  mcp-server:
+    build: .
+    ports:
+      - "3100:3100"
+    environment:
+      - MCP_TRANSPORT=http
+      - MCP_PORT=3100
+      - DVERSUM_API_URL=${DVERSUM_API_URL}
+    restart: unless-stopped
